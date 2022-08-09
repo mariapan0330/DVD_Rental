@@ -35,24 +35,21 @@ SELECT COUNT(*) FROM customer WHERE first_name = 'Willie';
 
 -- Q5: What store employee (get the id) sold the most rentals (use the rental table) ---------> rental
 -- A5: Employee #1 made 8,040 rentals
-SELECT staff_id, COUNT(staff_id) FROM rental GROUP BY staff_id;
+SELECT staff_id, count(staff_id) FROM rental GROUP BY staff_id;
 
 
 -- Q6: How many unique district names are there? ---------> address 
 -- A6: 378 
 --     but I got that by scrolling to the bottom of the rows returned.
---     I can't figure out how to make it just return the number of rows that would satisfy this request.
 SELECT district FROM address GROUP BY district ORDER BY district;
 
 
 -- Q7: What film has the most actors in it? (use film_actor table and get film_id) ---------> film_actor & film
 -- A7: There are 6 of them
-
-SELECT film_id, COUNT(film_id)
+SELECT film_id, COUNT(actor_id) AS actor_count
 FROM film_actor
 GROUP BY film_id
-HAVING COUNT(film_id) = 13;
--- this doesnt seem right. How do i just return max(count(film_id))?
+ORDER BY actor_count DESC;
 
 
 -- Q8: From store_id 1, how many customers have a last name ending with 'es'? (use customer table) ---------> customer 
@@ -64,10 +61,15 @@ SELECT COUNT(*) FROM customer WHERE last_name LIKE '%es';
 -- with ids between 380 and 430? (use GROUP BY and HAVING > 250) ---------> payment
 -- (AKA How many different payment amounts are there that have had over 250 rentals from all the ppl between 380 and 430)
 -- A9: 3
-SELECT amount FROM payment
-WHERE customer_id BETWEEN 380 AND 430
-GROUP BY amount HAVING count(amount) > 250;
+--SELECT amount FROM payment
+--WHERE customer_id BETWEEN 380 AND 430
+--GROUP BY amount HAVING count(amount) > 250;
 
+
+SELECT amount, count(amount) AS amt_count FROM payment
+WHERE customer_id BETWEEN 380 AND 430
+GROUP BY amount
+ORDER BY amt_count DESC;
 
 -- Q10: Within the film table, how many rating categories are there? And what rating has the most movies total? ---------> film
 -- A10: There are 5 possible ratings. The PG-13 rating has the most movies (223)
